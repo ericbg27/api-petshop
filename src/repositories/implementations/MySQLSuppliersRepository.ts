@@ -58,8 +58,6 @@ export class MySQLSuppliersRepository implements ISuppliersRepository {
             raw: true
         });
 
-        console.log(queryResult);
-
         return new Promise((resolve) => {
             if(!queryResult) {
                 resolve(undefined);

@@ -1,8 +1,16 @@
 import { ErrorID } from "../enums/ErrorId"
 
-export interface RequestError {
+interface RequestError extends Error {
     id: ErrorID;
     name: string;
-    message: string;
     status: number;
+}
+
+function isRequestError(arg: any): arg is RequestError {
+    return arg.id && arg.name && arg.message && arg.status;
+}
+
+export {
+    RequestError,
+    isRequestError
 }
