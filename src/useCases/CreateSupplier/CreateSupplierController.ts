@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { Supplier } from "../../entities/Supplier";
-import { Category } from "../../enums/category";
 import { CreateSupplierUseCase } from "./CreateSupplierUseCase";
 
 export class CreateSupplierController {

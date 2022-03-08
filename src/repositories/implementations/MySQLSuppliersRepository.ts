@@ -1,4 +1,5 @@
 import { Supplier } from "../../entities/Supplier";
+import { FailedOp } from "../../errors/FailedOp";
 import { ISuppliersRepository } from "../ISuppliersRepository";
 import { SupplierModel } from "../models/SupplierModel";
 
@@ -78,7 +79,7 @@ export class MySQLSuppliersRepository implements ISuppliersRepository {
                 }
             );
         } catch(error) {
-            throw new Error("Failed to update supplier");
+            throw new FailedOp("update", "supplier");
         }
     }
 
@@ -90,7 +91,7 @@ export class MySQLSuppliersRepository implements ISuppliersRepository {
                 }
             );
         } catch(error) {
-            throw new Error("Failed to delete supplier");
+            throw new FailedOp("delete", "supplier");
         }
     }
 }

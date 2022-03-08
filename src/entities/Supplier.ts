@@ -1,4 +1,5 @@
-import { Category } from "../enums/category";
+import { Category } from "../enums/Category";
+import { InvalidInput } from "../errors/InvalidInput";
 
 export class Supplier {
     public readonly id: number;
@@ -20,15 +21,15 @@ export class Supplier {
 
     validate(): void {
         if(!Object.values(Category).includes(this.category as Category)) {
-            throw new Error("Invalid category provided");
+            throw new InvalidInput("category");
         }
 
         if(this.company.length === 0) {
-            throw new Error("Empty company name provided");
+            throw new InvalidInput("company name");
         }
 
         if(this.email.length === 0) {
-            throw new Error("Empty email provided");
+            throw new InvalidInput("email");
         }
     }
 }
