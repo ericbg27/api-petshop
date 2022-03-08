@@ -1,4 +1,5 @@
 import { Supplier } from "../../entities/Supplier";
+import { AlreadyExists } from "../../errors/AlreadyExists";
 import { ISuppliersRepository } from "../../repositories/ISuppliersRepository";
 import { ICreateSupplierRequestDTO } from "./CreateUserUseCaseDTO";
 
@@ -11,7 +12,7 @@ export class CreateSupplierUseCase {
         const supplierExists = await this.suppliersRepository.findByEmail(requestData.email);
 
         if(supplierExists) {
-            throw new Error("Supplier already exists")
+            throw new AlreadyExists("Supplier");
         }
 
         const supplier = new Supplier(requestData);

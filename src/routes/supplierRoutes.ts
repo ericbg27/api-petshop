@@ -4,12 +4,12 @@ import { findSuppliersController } from "../useCases/FindSuppliers";
 
 const supplierRouter = Router();
 
-supplierRouter.get("/", (req, res) => {
-    return findSuppliersController.handle(req, res);
+supplierRouter.get("/", (req, res, next) => {
+    return findSuppliersController.handle(req, res, next);
 })
 
-supplierRouter.post('/', (req, res) => {
-    return createSupplierController.handle(req, res);
+supplierRouter.post('/', (req, res, next) => {
+    return createSupplierController.handle(req, res, next);
 });
 
 export { supplierRouter };

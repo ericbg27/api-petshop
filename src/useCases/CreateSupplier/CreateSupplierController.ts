@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { Supplier } from "../../entities/Supplier";
-import { Category } from "../../enums/category";
 import { CreateSupplierUseCase } from "./CreateSupplierUseCase";
 
 export class CreateSupplierController {
@@ -8,7 +6,7 @@ export class CreateSupplierController {
         private createSupplierUseCase: CreateSupplierUseCase
     ) {}
 
-    async handle(req: Request, res: Response): Promise<Response> {
+    async handle(req: Request, res: Response, next: any): Promise<Response> {
         const { email, company, category } = req.body;
 
         try {
@@ -19,15 +17,8 @@ export class CreateSupplierController {
             });
 
             return res.status(201).send();
-        } catch(error) { // TODO: Define error handler middleware to deal with sending errors
-            let message = "Unexpected error";
-            if(error) {
-                message = error.message;
-            }
-
-            return res.status(400).json({
-                message: message
-            });
+        } catch(error) {
+            return next(error);
         }
     }
 }
