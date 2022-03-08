@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { isRequestError } from "../../errors/RequestError";
-import { UnexpectedError } from "../../errors/UnexpectedError";
 import { FindSuppliersUseCase } from "./FindSuppliersUseCase";
 
 export class FindSuppliersController {

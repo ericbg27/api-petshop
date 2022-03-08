@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { CreateSupplierUseCase } from "./CreateSupplierUseCase";
-import { isRequestError } from "../../errors/RequestError";
-import { UnexpectedError } from "../../errors/UnexpectedError";
 
 export class CreateSupplierController {
     constructor(
