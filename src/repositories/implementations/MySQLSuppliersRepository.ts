@@ -16,6 +16,21 @@ export class MySQLSuppliersRepository implements ISuppliersRepository {
         });
     }
 
+    async findAll(): Promise<Supplier[]> {
+        const queryResult = await SupplierModel.findAll({ raw: true });
+        
+        let suppliersFound: Supplier[] = [];
+        if(queryResult.length > 0) {
+            for(let supplier of queryResult) {
+                suppliersFound.push(new Supplier(supplier));
+            }
+        }
+
+        return new Promise((resolve) => {
+            resolve(suppliersFound);
+        });
+    }
+
     async findById(id: string): Promise<Supplier | undefined> {
         const queryResult = await SupplierModel.findOne({
             where: {
