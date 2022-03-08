@@ -5,6 +5,6 @@ const app = express();
 
 app.use(express.json());
 
-app.use(supplierRouter);
+app.use("/suppliers", supplierRouter);
 
 export { app };
