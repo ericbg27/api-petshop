@@ -3,5 +3,6 @@ export enum ErrorID {
     InvalidInput,
     FailedOp,
     UnexpectedError,
-    BadRequest
+    BadRequest,
+    NotFound
 }

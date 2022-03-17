@@ -1,4 +1,5 @@
 import { Supplier } from "../../entities/Supplier";
+import { NotFound } from "../../errors/NotFound";
 import { ISuppliersRepository } from "../../repositories/ISuppliersRepository";
 import { IUpdateSupplierDTO } from "./UpdateSupplierUseCaseDTO";
 
@@ -10,7 +11,7 @@ export class UpdateSupplierUseCase {
     async exec(id: number, data: IUpdateSupplierDTO): Promise<void> {
         const savedUser = await this.suppliersRepository.findById(id);
         if(!savedUser) {
-            throw Error("TEST ERROR"); // TODO: Define specific error
+            throw new NotFound(`User with ID ${id} was not found in database`);
         }
 
         let userData = new Supplier({
