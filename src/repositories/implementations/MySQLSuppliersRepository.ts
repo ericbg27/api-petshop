@@ -32,7 +32,7 @@ export class MySQLSuppliersRepository implements ISuppliersRepository {
         });
     }
 
-    async findById(id: string): Promise<Supplier | undefined> {
+    async findById(id: number): Promise<Supplier | undefined> {
         const queryResult = await SupplierModel.findOne({
             where: {
                 id: id
@@ -68,7 +68,7 @@ export class MySQLSuppliersRepository implements ISuppliersRepository {
         });
     }
 
-    async update(id: string, data: Supplier): Promise<void> {
+    async update(id: number, data: Supplier): Promise<void> {
         try {
             await SupplierModel.update(
                 data,
