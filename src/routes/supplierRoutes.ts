@@ -3,6 +3,7 @@ import { createSupplierController } from "../useCases/CreateSupplier";
 import { findSuppliersController } from "../useCases/FindSuppliers";
 import { findSupplierByIdController } from "../useCases/FindSupplierById";
 import { updateSupplierController } from "../useCases/UpdateSupplier";
+import { deleteSupplierController } from "../useCases/DeleteSupplier";
 
 const supplierRouter = Router();
 
@@ -18,12 +19,16 @@ supplierRouter.post('/', (req, res, next) => {
     return createSupplierController.handle(req, res, next);
 });
 
-supplierRouter.put('/', (req, res, next) => {
+supplierRouter.put('/:supplierId', (req, res, next) => {
     return updateSupplierController.handle(req, res, next, false);
 });
 
-supplierRouter.patch('/', (req, res, next) => {
+supplierRouter.patch('/:supplierId', (req, res, next) => {
     return updateSupplierController.handle(req, res, next, true);
+});
+
+supplierRouter.delete('/:supplierId', (req, res, next) => {
+    return deleteSupplierController.handle(req, res, next);
 });
 
 export { supplierRouter };

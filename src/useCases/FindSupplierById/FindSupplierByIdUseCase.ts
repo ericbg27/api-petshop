@@ -6,7 +6,7 @@ export class FindSupplierByIdUseCase {
         private suppliersRepository: ISuppliersRepository
     ) {}
 
-    async execute(supplierId: number) {
+    async execute(supplierId: number): Promise<Supplier | undefined> {
         return this.suppliersRepository.findById(supplierId);
     }
 };
