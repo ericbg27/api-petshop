@@ -7,12 +7,10 @@ export class UpdateSupplierController {
         private updateSupplierUseCase: UpdateSupplierUseCase
     ) {}
 
-    async handle(req: Request, res: Response, next: any, partial: boolean) {
+    async handle(req: Request, res: Response, next: any, partial: boolean): Promise<Response> {
         if(!req.params.supplierId) { // TODO: Maybe have this as a middleware
             const idErr = new BadRequest("Invalid supplier ID sent in request");
-            next(idErr);
-
-            return;
+            return next(idErr);
         }
 
         const { email, company, category } = req.body;
@@ -26,9 +24,11 @@ export class UpdateSupplierController {
         }
         
         try {
-            this.updateSupplierUseCase.exec(supplierId, userData);
+            await this.updateSupplierUseCase.exec(supplierId, userData);
+
+            return res.status(204).send();
         } catch(error) {
-            next(error);
+            return next(error);
         }
     }
 };
