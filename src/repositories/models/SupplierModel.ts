@@ -4,6 +4,7 @@ import { sequelize } from './db';
 class SupplierModel extends Model<InferAttributes<SupplierModel>, InferCreationAttributes<SupplierModel>> {
     declare id: CreationOptional<number>;
     declare email: string;
+    declare password: string;
     declare company: string;
     declare category: string;
     declare createdAt: CreationOptional<Date>;
@@ -19,6 +20,10 @@ SupplierModel.init(
             primaryKey: true
         },
         email: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        password: {
             type: DataTypes.STRING,
             allowNull: false
         },

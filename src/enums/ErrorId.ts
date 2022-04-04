@@ -4,5 +4,6 @@ export enum ErrorID {
     FailedOp,
     UnexpectedError,
     BadRequest,
-    NotFound
+    NotFound,
+    Unauthorized
 }
