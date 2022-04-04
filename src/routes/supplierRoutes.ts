@@ -5,6 +5,7 @@ import { findSupplierByIdController } from "../useCases/FindSupplierById";
 import { updateSupplierController } from "../useCases/UpdateSupplier";
 import { deleteSupplierController } from "../useCases/DeleteSupplier";
 import { validateSupplierController } from "../useCases/ValidateSupplier";
+import { loginSupplierController } from "../useCases/LoginSupplier";
 
 const supplierRouter = Router();
 
@@ -16,7 +17,11 @@ supplierRouter.get('/:supplierId', (req, res, next) => {
     return findSupplierByIdController.handle(req, res, next);
 });
 
-supplierRouter.post('/', (req, res, next) => {
+supplierRouter.post('/login', (req, res, next) => {
+    return loginSupplierController.handle(req, res, next);
+});
+
+supplierRouter.post('/register', (req, res, next) => {
     return createSupplierController.handle(req, res, next);
 });
 

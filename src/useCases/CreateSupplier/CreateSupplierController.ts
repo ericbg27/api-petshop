@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Supplier } from "../../entities/Supplier";
 import { CreateSupplierUseCase } from "./CreateSupplierUseCase";
 
 export class CreateSupplierController {
@@ -7,16 +8,16 @@ export class CreateSupplierController {
     ) {}
 
     async handle(req: Request, res: Response, next: any): Promise<Response> {
-        const { email, company, category } = req.body;
-
+        let { email, company, category, password } = req.body;
+        
         try {
-            await this.createSupplierUseCase.execute({
-                email,
-                company, 
-                category
-            });
+            let supplierToCreate = new Supplier({ email, company, category, password });
+            supplierToCreate.validate();
 
-            return res.status(201).send();
+            const createdSupplier = await this.createSupplierUseCase.execute(supplierToCreate);
+
+            req.session.supplier = createdSupplier.email;
+            return res.status(201).send(JSON.stringify(createdSupplier));
         } catch(error) {
             return next(error);
         }
