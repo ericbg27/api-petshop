@@ -1,7 +1,9 @@
+import { ProductModel } from "../../repositories/models/ProductModel";
 import { SupplierModel } from "../../repositories/models/SupplierModel"
 
 const models = [
-    SupplierModel
+    SupplierModel,
+    ProductModel
 ]
 
 async function createTables(): Promise<void> {
