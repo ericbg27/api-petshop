@@ -9,7 +9,10 @@ export class CreateProductController {
 
     async handle(req: Request, res: Response, next: any): Promise<Response> {
         const { name, description, price, quantity } = req.body;
-        const supplierId = parseInt(req.params.supplierId);
+        if(!req.session.supplier) {
+            throw new Unauthorized('Unauthorized supplier');
+        }
+        const supplierId = req.session.supplier.id;
 
         try {
             const createdProduct = await this.createProductUseCase.execute({

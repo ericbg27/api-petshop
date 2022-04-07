@@ -34,11 +34,15 @@ export class MySQLProductsRepository implements IProductsRepository {
         });
     }
 
-    async findByName(productName: string): Promise<Product | undefined> {
+    async findByName(productName: string, supplierId?: number): Promise<Product | undefined> {
+        let whereClauses = {
+            name: productName
+        }
+        if(supplierId) {
+            Object.assign(whereClauses, { supplierId: supplierId });
+        }
         const queryResult = await ProductModel.findOne({
-            where: { 
-                name: productName
-            },
+            where: whereClauses,
             raw: true
         });
 

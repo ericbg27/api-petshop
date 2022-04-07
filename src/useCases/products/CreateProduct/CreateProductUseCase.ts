@@ -10,7 +10,7 @@ export class CreateProductUseCase {
     ) {}
 
     async execute(productData: ICreateProducUseCasetDTO): Promise<Product> {
-        const productExists = await this.productsRepository.findByName(productData.name);
+        const productExists = await this.productsRepository.findByName(productData.name, productData.supplierId);
         if(productExists) {
             throw new AlreadyExists("product");
         }

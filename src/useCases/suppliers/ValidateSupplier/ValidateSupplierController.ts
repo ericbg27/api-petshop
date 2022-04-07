@@ -13,12 +13,8 @@ export class ValidateSupplierController {
             const sessionErr = new Unauthorized('Unauthorized supplier');
             return next(sessionErr); 
         }
-        if(!req.params.supplierId) {
-            const idErr = new BadRequest("Invalid supplier ID sent in request");
-            return next(idErr);
-        }
 
-        const supplierId = parseInt(req.params.supplierId);
+        const supplierId = req.session.supplier.id;
         // TODO: Check if this makes sense since we have the supplier ID in our session
         const authorized = await this.validateSupplierUseCase.execute(supplierId, req.session.supplier.email);
         if(!authorized) {
