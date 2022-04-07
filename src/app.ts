@@ -36,6 +36,8 @@ app.use(session({
 app.use('/suppliers', supplierRouter);
 app.use('/suppliers/:supplierId/products', productRouter);
 
+console.log(app.path());
+
 app.use(function(error: any, req: Request, res: Response, next: any) {
     let err = error;
     if(!isRequestError(error)) {

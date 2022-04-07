@@ -55,4 +55,24 @@ export class MySQLProductsRepository implements IProductsRepository {
             resolve(new Product(queryResult));
         });
     }
+
+    async findAllForSupplier(supplierId: number): Promise<Product[]> {
+        const queryResult = await ProductModel.findAll({
+            where: {
+                supplierId: supplierId
+            },
+            raw: true 
+        });
+        
+        let productsFound: Product[] = [];
+        if(queryResult.length > 0) {
+            for(let product of queryResult) {
+                productsFound.push(new Product(product));
+            }
+        }
+
+        return new Promise((resolve) => {
+            resolve(productsFound);
+        });
+    }
 }
