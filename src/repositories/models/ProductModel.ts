@@ -35,7 +35,7 @@ ProductModel.init({
         allowNull: true
     },
     price: {
-        type: DataTypes.DOUBLE.UNSIGNED,
+        type: DataTypes.DOUBLE,
         allowNull: false
     },
     quantity: {

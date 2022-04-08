@@ -1,10 +1,11 @@
 import { Product } from "../../entities/Product";
+import { FailedOp } from "../../errors/FailedOp";
 import { IProductsRepository } from "../IProductsRepository";
 import { ProductModel } from "../models/ProductModel";
 
 export class MySQLProductsRepository implements IProductsRepository {
-    async create(product: Product): Promise<Product> {
-        const queryResult = await ProductModel.create(product, { raw: true });
+    async create(product: Product): Promise<number> {
+        const queryResult = await ProductModel.create(product);
                 
         return new Promise((resolve, reject) => {
             if(!queryResult) {
@@ -12,7 +13,7 @@ export class MySQLProductsRepository implements IProductsRepository {
                 return;
             }
 
-            resolve(new Product(queryResult));
+            resolve(queryResult.id);
         });
     }
     
@@ -74,5 +75,36 @@ export class MySQLProductsRepository implements IProductsRepository {
         return new Promise((resolve) => {
             resolve(productsFound);
         });
+    }
+    
+    async update(productId: number, data: Product): Promise<Product> {
+        try {
+            const queryResult = await ProductModel.update(
+                data,
+                {
+                    where: {
+                        id: productId
+                    }
+                }
+            );
+
+            if(queryResult[0] === 0) {
+                throw new Error();
+            }
+
+            const updatedProduct = await ProductModel.findOne({ 
+                where: { 
+                    id: productId 
+                },
+                raw: true
+            });
+            if(!updatedProduct) {
+                throw new Error();
+            }
+
+            return new Product(updatedProduct);
+        } catch(error) {
+            throw new FailedOp("update", "product");
+        }
     }
 }

@@ -19,8 +19,8 @@ export class CreateProductController {
                 supplierId,
                 name,
                 description,
-                price,
-                quantity
+                price: parseFloat(price),
+                quantity: parseInt(quantity)
             });
 
             return res.status(201).send(JSON.stringify(createdProduct))
