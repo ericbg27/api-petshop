@@ -4,13 +4,12 @@ import { ISuppliersRepository } from "../ISuppliersRepository";
 import { SupplierModel } from "../models/SupplierModel";
 
 export class MySQLSuppliersRepository implements ISuppliersRepository {
-    async create(supplier: Supplier): Promise<Supplier> {
-        const queryResult = await SupplierModel.create(supplier, { raw: true });
-        if(!queryResult) {
+    async create(supplier: Supplier): Promise<void> {
+        try {
+            await SupplierModel.create(supplier, { raw: true });
+        } catch(error) {
             throw new FailedOp('create', 'supplier');
         }
-
-        return new Supplier(queryResult);
     }
 
     async findAll(): Promise<Supplier[]> {

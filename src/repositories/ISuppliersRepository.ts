@@ -1,7 +1,7 @@
 import { Supplier } from "../entities/Supplier";
 
 export interface ISuppliersRepository {
-    create(supplier: Supplier): Promise<Supplier>;
+    create(supplier: Supplier): Promise<void>;
     findAll(): Promise<Supplier[]>;
     findById(id: number): Promise<Supplier | undefined>;
     findByEmail(email: string): Promise<Supplier | undefined>;
