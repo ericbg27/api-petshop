@@ -6,4 +6,5 @@ export interface IProductsRepository {
     findByName(productName: string, supplierId?: number): Promise<Product | undefined>;
     findAllForSupplier(supplierId: number): Promise<Product[]>;
     update(productId: number, data: Product): Promise<Product>;
+    delete(productId: number): Promise<void>;
 };

@@ -107,4 +107,18 @@ export class MySQLProductsRepository implements IProductsRepository {
             throw new FailedOp("update", "product");
         }
     }
+
+    async delete(productId: number): Promise<void> {
+        try {
+            await ProductModel.destroy({
+                where: {
+                    id: productId
+                }
+            });
+
+            return;
+        } catch(error) {
+            throw new FailedOp('delete', 'product');
+        }
+    }
 }

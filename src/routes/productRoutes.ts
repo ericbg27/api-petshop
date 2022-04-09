@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createProductController } from "../useCases/products/CreateProduct";
+import { deleteProductController } from "../useCases/products/DeleteProduct";
 import { findProductByIdController } from "../useCases/products/FindProductById";
 import { findProductsForSupplierController } from "../useCases/products/FindProductsForSupplier";
 import { updateProductController } from "../useCases/products/UpdateProduct";
@@ -33,6 +34,13 @@ productRouter.patch('/:productId/update', (req, res, next) => {
         return validateSupplierController.handle(req, res, next);
     }, (req, res, next) => {
         return updateProductController.handle(req, res, next, true);
+    }
+);
+
+productRouter.delete('/:productId', (req, res, next) => {
+        return validateSupplierController.handle(req, res, next);
+    }, (req, res, next) => {
+        return deleteProductController.handle(req, res, next);
     }
 );
 
