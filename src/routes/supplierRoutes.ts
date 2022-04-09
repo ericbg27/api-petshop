@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { createSupplierController } from "../useCases/CreateSupplier";
-import { findSuppliersController } from "../useCases/FindSuppliers";
-import { findSupplierByIdController } from "../useCases/FindSupplierById";
-import { updateSupplierController } from "../useCases/UpdateSupplier";
-import { deleteSupplierController } from "../useCases/DeleteSupplier";
-import { validateSupplierController } from "../useCases/ValidateSupplier";
-import { loginSupplierController } from "../useCases/LoginSupplier";
+import { createSupplierController } from "../useCases/suppliers/CreateSupplier";
+import { findSuppliersController } from "../useCases/suppliers/FindSuppliers";
+import { findSupplierByIdController } from "../useCases/suppliers/FindSupplierById";
+import { updateSupplierController } from "../useCases/suppliers/UpdateSupplier";
+import { deleteSupplierController } from "../useCases/suppliers/DeleteSupplier";
+import { validateSupplierController } from "../useCases/suppliers/ValidateSupplier";
+import { loginSupplierController } from "../useCases/suppliers/LoginSupplier";
 
 const supplierRouter = Router();
 

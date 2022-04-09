@@ -1,5 +1,11 @@
-import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes } from '@sequelize/core'
+import { 
+    Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes, HasManyGetAssociationsMixin, 
+    HasManyAddAssociationMixin, HasManyAddAssociationsMixin, HasManySetAssociationsMixin, HasManyRemoveAssociationMixin, 
+    HasManyRemoveAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin, HasManyCountAssociationsMixin, 
+    HasManyCreateAssociationMixin, NonAttribute, Association 
+} from '@sequelize/core'
 import { sequelize } from './db';
+import { ProductModel } from './ProductModel';
 
 class SupplierModel extends Model<InferAttributes<SupplierModel>, InferCreationAttributes<SupplierModel>> {
     declare id: CreationOptional<number>;
@@ -10,6 +16,23 @@ class SupplierModel extends Model<InferAttributes<SupplierModel>, InferCreationA
     declare createdAt: CreationOptional<Date>;
     declare updatedAt: CreationOptional<Date>;
     //declare version: CreationOptional<number>;
+
+    declare products?: NonAttribute<ProductModel[]>;
+
+    declare getProducts: HasManyGetAssociationsMixin<ProductModel>;
+    declare addProduct: HasManyAddAssociationMixin<ProductModel, number>;
+    declare addProducts: HasManyAddAssociationsMixin<ProductModel, number>;
+    declare setProducts: HasManySetAssociationsMixin<ProductModel, number>;
+    declare removeProduct: HasManyRemoveAssociationMixin<ProductModel, number>;
+    declare removeProducts: HasManyRemoveAssociationsMixin<ProductModel, number>;
+    declare hasProduct: HasManyHasAssociationMixin<ProductModel, number>;
+    declare hasProducts: HasManyHasAssociationsMixin<ProductModel, number>;
+    declare countProducts: HasManyCountAssociationsMixin;
+    declare createProduct: HasManyCreateAssociationMixin<ProductModel, 'supplierId'>;
+
+    declare static associations: {
+        products: Association<SupplierModel, ProductModel>;
+    };
 };
 
 SupplierModel.init(

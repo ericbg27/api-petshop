@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { isRequestError, RequestError } from './errors/RequestError';
 import { UnexpectedError } from './errors/UnexpectedError';
 import { supplierRouter } from './routes/supplierRoutes';
+import { productRouter } from './routes/productRoutes';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import nodeConfig from "config";
@@ -33,6 +34,9 @@ app.use(session({
 }));
 
 app.use('/suppliers', supplierRouter);
+app.use('/suppliers/:supplierId/products', productRouter);
+
+console.log(app.path());
 
 app.use(function(error: any, req: Request, res: Response, next: any) {
     let err = error;
