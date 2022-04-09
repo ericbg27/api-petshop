@@ -6,15 +6,11 @@ import { SupplierModel } from "../models/SupplierModel";
 export class MySQLSuppliersRepository implements ISuppliersRepository {
     async create(supplier: Supplier): Promise<Supplier> {
         const queryResult = await SupplierModel.create(supplier, { raw: true });
-                
-        return new Promise((resolve, reject) => {
-            if(!queryResult) {
-                reject(new Error("Failed to create supplier"));
-                return;
-            }
+        if(!queryResult) {
+            throw new FailedOp('create', 'supplier');
+        }
 
-            resolve(new Supplier(queryResult));
-        });
+        return new Supplier(queryResult);
     }
 
     async findAll(): Promise<Supplier[]> {
@@ -27,9 +23,7 @@ export class MySQLSuppliersRepository implements ISuppliersRepository {
             }
         }
 
-        return new Promise((resolve) => {
-            resolve(suppliersFound);
-        });
+        return suppliersFound;
     }
 
     async findById(id: number): Promise<Supplier | undefined> {
@@ -40,14 +34,11 @@ export class MySQLSuppliersRepository implements ISuppliersRepository {
             raw: true
         });
 
-        return new Promise((resolve) => {
-            if(!queryResult) {
-                resolve(undefined);
-                return;
-            }
+        if(!queryResult) {
+            return undefined;
+        }
 
-            resolve(new Supplier(queryResult));
-        });
+        return new Supplier(queryResult);
     }
 
     async findByEmail(email: string): Promise<Supplier | undefined> {
@@ -58,24 +49,25 @@ export class MySQLSuppliersRepository implements ISuppliersRepository {
             raw: true
         });
 
-        return new Promise((resolve) => {
-            if(!queryResult) {
-                resolve(undefined);
-                return;
-            }
+        if(!queryResult) {
+            return undefined;
+        }
 
-            resolve(new Supplier(queryResult));
-        });
+        return new Supplier(queryResult);
     }
 
     async update(id: number, data: Supplier): Promise<void> {
         try {
-            await SupplierModel.update(
+            const queryResult = await SupplierModel.update(
                 data,
                 {
                     where: { id: id }
                 }
             );
+
+            if(queryResult[0] === 0) {
+                throw new Error();
+            }
         } catch(error) {
             throw new FailedOp("update", "supplier");
         }
