@@ -1,86 +1,91 @@
 import { Supplier } from "../../entities/Supplier";
 import { FailedOp } from "../../errors/FailedOp";
+import { SuppliersDAO } from "../daos/SuppliersDAO";
 import { ISuppliersRepository } from "../ISuppliersRepository";
-import { SupplierModel } from "../models/SupplierModel";
 
 export class MySQLSuppliersRepository implements ISuppliersRepository {
     async create(supplier: Supplier): Promise<void> {
         try {
-            await SupplierModel.create(supplier, { raw: true });
-        } catch(error) {
+            await SuppliersDAO.create(supplier);
+        } catch(_) {
             throw new FailedOp('create', 'supplier');
         }
     }
 
     async findAll(): Promise<Supplier[]> {
-        const queryResult = await SupplierModel.findAll({ raw: true });
-        
-        let suppliersFound: Supplier[] = [];
-        if(queryResult.length > 0) {
-            for(let supplier of queryResult) {
-                suppliersFound.push(new Supplier(supplier));
-            }
-        }
+        try {
+            const queryResult = await SuppliersDAO.findAll();
 
-        return suppliersFound;
+            let suppliersFound: Supplier[] = [];
+            if(queryResult.length > 0) {
+                for(let supplier of queryResult) {
+                    suppliersFound.push(
+                        new Supplier(supplier.get({ plain: true }))
+                    );
+                }
+            }
+            
+            return suppliersFound;
+        } catch(_) {
+            throw new FailedOp('findAll', 'supplier');
+        }
     }
 
     async findById(id: number): Promise<Supplier | undefined> {
-        const queryResult = await SupplierModel.findOne({
-            where: {
-                id: id
-            },
-            raw: true
-        });
+        try {
+            const queryResult = await SuppliersDAO.findOne({
+                where: { id: id }
+            });
 
-        if(!queryResult) {
-            return undefined;
+            if(!queryResult) {
+                return undefined;
+            }
+
+            return new Supplier(queryResult.get({ plain: true }));
+        } catch(_) {
+            throw new FailedOp('findById', 'supplier');
         }
-
-        return new Supplier(queryResult);
     }
 
     async findByEmail(email: string): Promise<Supplier | undefined> {
-        const queryResult = await SupplierModel.findOne({
-            where: {
-                email: email
-            },
-            raw: true
-        });
+        try {
+            const queryResult = await SuppliersDAO.findOne({
+                where: {
+                    email: email
+                },
+                raw: true
+            });
 
-        if(!queryResult) {
-            return undefined;
+            if(!queryResult) {
+                return undefined;
+            }
+
+            return new Supplier(queryResult.get({ plain: true }));
+        } catch(_) {
+            throw new FailedOp('findByEmail', 'supplier');
         }
-
-        return new Supplier(queryResult);
     }
 
     async update(id: number, data: Supplier): Promise<void> {
         try {
-            const queryResult = await SupplierModel.update(
+            return await SuppliersDAO.update(
                 data,
-                {
-                    where: { id: id }
-                }
+                { id: id }
             );
-
-            if(queryResult[0] === 0) {
-                throw new Error();
-            }
-        } catch(error) {
-            throw new FailedOp("update", "supplier");
+        } catch(_) {
+            throw new FailedOp('update', 'supplier');
         }
     }
 
     async delete(id: number): Promise<void> {
         try {
-            await SupplierModel.destroy(
-                {
-                    where: { id: id }
+            await SuppliersDAO.delete({
+                where: { 
+                    id: id
                 }
-            );
-        } catch(error) {
-            throw new FailedOp("delete", "supplier");
+            });
+        } catch(_) {
+            throw new FailedOp('delete', 'supplier');
         }
     }
 }
