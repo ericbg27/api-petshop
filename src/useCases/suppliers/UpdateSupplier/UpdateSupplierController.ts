@@ -26,7 +26,7 @@ export class UpdateSupplierController {
         try {
             const updatedSupplier = await this.updateSupplierUseCase.exec(supplierId, userData);
 
-            return res.status(204).send(JSON.stringify(updatedSupplier));
+            return res.status(200).send(JSON.stringify(updatedSupplier));
         } catch(error) {
             return next(error);
         }

@@ -2,14 +2,14 @@ import { Supplier } from "../../entities/Supplier";
 import { SupplierModel } from "../models/SupplierModel";
 
 export class SuppliersDAO {
-    static async create(supplier: Supplier): Promise<void> {
-        await SupplierModel.create(supplier);
+    static async create(supplier: Supplier): Promise<number> {
+        const createdSupplier = await SupplierModel.create(supplier);
         
-        return;
+        return createdSupplier.id;
     }
 
     static async findAll(): Promise<SupplierModel[]> {
-        return await SupplierModel.findAll({ raw: true });
+        return await SupplierModel.findAll();
     }
 
     static async findOne(queryOptions: { [key: string]: any }): Promise<SupplierModel | null> {
