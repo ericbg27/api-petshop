@@ -16,12 +16,16 @@ export class CreateSupplierController {
 
             const createdSupplier = await this.createSupplierUseCase.execute(supplierToCreate);
 
-            req.session.supplier = {
-                id: createdSupplier.id,
-                email: createdSupplier.email
+            if(createdSupplier) {
+                req.session.supplier = {
+                    id: createdSupplier.id,
+                    email: createdSupplier.email
+                };
+
+                return res.status(201).send(JSON.stringify(createdSupplier));
             }
             
-            return res.status(201).send(JSON.stringify(createdSupplier));
+            return res.status(204).end();
         } catch(error) {
             return next(error);
         }

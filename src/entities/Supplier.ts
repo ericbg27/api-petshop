@@ -12,7 +12,7 @@ export class Supplier {
     public updatedAt: Date;
     public version: number;
 
-    constructor(props: Omit<Supplier, 'id' | 'createdAt' | 'updatedAt' | 'version' | 'validate' >, extraProps?: Omit<Supplier, 'email' | 'company' | 'category' | 'validate'>) {
+    constructor(props: Omit<Supplier, 'id' | 'createdAt' | 'updatedAt' | 'version' | 'validate' >, extraProps?: Omit<Supplier, 'email' | 'company' | 'category' | 'password' | 'validate'>) {
         Object.assign(this, props);
 
         if(extraProps) {

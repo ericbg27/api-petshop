@@ -18,8 +18,6 @@ export class CreateProductUseCase {
 
         const productToCreate = new Product(productData);
         productToCreate.validate(false);
-
-        console.log(productToCreate);
         
         const newProductId = await this.productsRepository.create(productToCreate);
         

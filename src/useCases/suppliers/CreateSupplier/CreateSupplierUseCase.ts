@@ -9,7 +9,7 @@ export class CreateSupplierUseCase {
         private suppliersRepository: ISuppliersRepository
     ) {}
 
-    async execute(requestData: ICreateSupplierRequestDTO): Promise<Supplier> {
+    async execute(requestData: ICreateSupplierRequestDTO): Promise<Supplier | undefined> {
         const supplierExists = await this.suppliersRepository.findByEmail(requestData.email);
 
         if(supplierExists) {
@@ -21,13 +21,19 @@ export class CreateSupplierUseCase {
 
         const supplier = new Supplier(requestData);
         
-        let newSupplier: Supplier;
         try {
-            newSupplier = await this.suppliersRepository.create(supplier);
+            await this.suppliersRepository.create(supplier);
         } catch(error) {
             throw error;
         }
 
-        return newSupplier;
+        let newSupplier: Supplier | undefined;
+        try {
+            newSupplier = await this.suppliersRepository.findByEmail(supplier.email);
+
+            return newSupplier;
+        } catch(_) {
+            return undefined;
+        }
     }
 }

@@ -1,38 +1,38 @@
 import { Product } from "../../entities/Product";
 import { FailedOp } from "../../errors/FailedOp";
+import { ProductsDAO } from "../daos/ProductsDAO";
 import { IProductsRepository } from "../IProductsRepository";
 import { ProductModel } from "../models/ProductModel";
 
 export class MySQLProductsRepository implements IProductsRepository {
     async create(product: Product): Promise<number> {
-        const queryResult = await ProductModel.create(product);
+        let productId: number = -1;
+        try {
+            productId = await ProductsDAO.create(product);
+        } catch(_) {
+            throw new FailedOp('create', 'product');
+        }
                 
-        return new Promise((resolve, reject) => {
-            if(!queryResult) {
-                reject(new Error("Failed to create product"));
-                return;
-            }
-
-            resolve(queryResult.id);
-        });
+        return productId;
     }
     
     async findById(productId: number): Promise<Product | undefined> {
-        const queryResult = await ProductModel.findOne({
-            where: { 
-                id: productId 
-            },
-            raw: true
-        });
+        let product: ProductModel | null = null;
+        try {
+            product = await ProductsDAO.findOne({
+                where: {
+                    id: productId
+                }
+            });
+        } catch(_) {
+            throw new FailedOp('findById', 'product');
+        }
 
-        return new Promise((resolve) => {
-            if(!queryResult) {
-                resolve(undefined);
-                return;
-            }
+        if(!product) {
+            return undefined;
+        }
 
-            resolve(new Product(queryResult));
-        });
+        return new Product(product.get({ plain: true }));
     }
 
     async findByName(productName: string, supplierId?: number): Promise<Product | undefined> {
@@ -42,83 +42,97 @@ export class MySQLProductsRepository implements IProductsRepository {
         if(supplierId) {
             Object.assign(whereClauses, { supplierId: supplierId });
         }
-        const queryResult = await ProductModel.findOne({
-            where: whereClauses,
-            raw: true
-        });
 
-        return new Promise((resolve) => {
-            if(!queryResult) {
-                resolve(undefined);
-                return;
-            }
+        let product: ProductModel | null = null;
+        try {
+            product = await ProductsDAO.findOne({
+                where: whereClauses
+            });
+        } catch(_) {
+            throw new FailedOp('findByName', 'product');
+        }
 
-            resolve(new Product(queryResult));
-        });
+        if(!product) {
+            return undefined;
+        }
+
+        return new Product(product.get({ plain: true }));
     }
 
     async findAllForSupplier(supplierId: number): Promise<Product[]> {
-        const queryResult = await ProductModel.findAll({
-            where: {
-                supplierId: supplierId
-            },
-            raw: true 
-        });
+        let products: ProductModel[] = [];
+        try {
+            products = await ProductsDAO.findAll({
+                where: {
+                    supplierId: supplierId
+                }
+            });
+        } catch(_) {
+            throw new FailedOp('findAll', 'product');
+        }
         
         let productsFound: Product[] = [];
-        if(queryResult.length > 0) {
-            for(let product of queryResult) {
-                productsFound.push(new Product(product));
+        if(products.length > 0) {
+            for(let product of products) {
+                productsFound.push(new Product(product.get({ plain: true })));
             }
         }
 
-        return new Promise((resolve) => {
-            resolve(productsFound);
-        });
+        return productsFound;
     }
     
     async update(productId: number, data: Product): Promise<Product> {
+        let productsUpdated: number = 0;
         try {
-            const queryResult = await ProductModel.update(
-                data,
-                {
-                    where: {
-                        id: productId
-                    }
-                }
-            );
+            productsUpdated = await ProductsDAO.update(data, { id: productId });
 
-            if(queryResult[0] === 0) {
+            if(productsUpdated === 0) {
                 throw new Error();
             }
+        } catch(_) {
+            throw new FailedOp('update', 'product');
+        }
 
-            const updatedProduct = await ProductModel.findOne({ 
+        let updatedProduct: ProductModel | null;
+        try {
+            updatedProduct = await ProductsDAO.findOne({ 
                 where: { 
                     id: productId 
-                },
-                raw: true
+                }
             });
-            if(!updatedProduct) {
-                throw new Error();
-            }
-
-            return new Product(updatedProduct);
-        } catch(error) {
-            throw new FailedOp("update", "product");
+        } catch(_) {
+            updatedProduct = null;
         }
+
+        if(!updatedProduct) {
+            return new Product({
+                name: "",
+                price: 0,
+                quantity: 0,
+                description: "",
+                supplierId: 0
+            });
+        }
+
+        return new Product(updatedProduct.get({ plain: true }));
     }
 
     async delete(productId: number): Promise<void> {
+        let productsDeleted: number = 0
         try {
-            await ProductModel.destroy({
+            productsDeleted = await ProductsDAO.delete({
                 where: {
                     id: productId
                 }
             });
 
-            return;
-        } catch(error) {
+            if(productsDeleted === 0) {
+                throw new Error();
+            }
+        } catch(_) {
             throw new FailedOp('delete', 'product');
         }
+
+        return;
     }
 }
