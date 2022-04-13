@@ -69,6 +69,162 @@
                         }
                     }
                 }
+            },
+            "put": {
+                "summary": "Update supplier",
+                "description:": "Update supplier. This route does not accept partial information",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "supplierId",
+                        "in": "path",
+                        "description": "ID of the supplier to be updated",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "description": "The supplier's email",
+                        "required": true,
+                        "type": "string",
+                        "example": "supplier@email.com"
+                    },
+                    {
+                        "name": "category",
+                        "in": "body",
+                        "description": "The supplier's category",
+                        "required": true,
+                        "type": "string",
+                        "example":  "food"
+                    },
+                    {
+                        "name": "company",
+                        "in": "body",
+                        "description": "The company's name",
+                        "required": true,
+                        "type": "string",
+                        "example": "A Company"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation. Supplier is logged in and session is (possibly) stored"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Supplier logged in is not the same as the one that is being updated",
+                        "schema": {
+                            "$ref": "#/definitions/Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found. No supplier with the provided ID was found",
+                        "schema": {
+                            "$ref": "#/definitions/NotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error. Failed to update supplier.",
+                        "schema": {
+                            "$ref": "#/definitions/FailedOp"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "summary": "Update supplier",
+                "description:": "Update supplier. This route does accepts partial information",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "supplierId",
+                        "in": "path",
+                        "description": "ID of the supplier to be updated",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "description": "The supplier's email",
+                        "type": "string",
+                        "example": "supplier@email.com"
+                    },
+                    {
+                        "name": "category",
+                        "in": "body",
+                        "description": "The supplier's category",
+                        "type": "string",
+                        "example":  "food"
+                    },
+                    {
+                        "name": "company",
+                        "in": "body",
+                        "description": "The company's name",
+                        "type": "string",
+                        "example": "A Company"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation. Supplier is logged in and session is (possibly) stored"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Supplier logged in is not the same as the one that is being updated",
+                        "schema": {
+                            "$ref": "#/definitions/Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found. No supplier with the provided ID was found",
+                        "schema": {
+                            "$ref": "#/definitions/NotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error. Failed to update supplier.",
+                        "schema": {
+                            "$ref": "#/definitions/FailedOp"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete supplier",
+                "description:": "Delete supplier with the provided ID",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "supplierId",
+                        "in": "path",
+                        "description": "ID of the supplier to be deleted",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation. Supplier is deleted"
+                    },
+                    "401": {
+                        "description": "Unauthorized. Supplier logged in is not the same as the one that is being deleted",
+                        "schema": {
+                            "$ref": "#/definitions/Unauthorized"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found. No supplier with the provided ID was found",
+                        "schema": {
+                            "$ref": "#/definitions/NotFound"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error. Failed to delete supplier.",
+                        "schema": {
+                            "$ref": "#/definitions/FailedOp"
+                        }
+                    }
+                }
             }
         },
         "/suppliers/login": {
@@ -112,6 +268,64 @@
                     },
                     "500": {
                         "description": "Server error. Failed to login.",
+                        "schema": {
+                            "$ref": "#/definitions/FailedOp"
+                        }
+                    }
+                }
+            }
+        },
+        "/suppliers/register": {
+            "post": {
+                "summary": "Register supplier",
+                "description:": "Register a new supplier given necessary information",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "description": "The supplier's email",
+                        "required": true,
+                        "type": "string",
+                        "example": "supplier@email.com"
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "description": "The supplier's password",
+                        "required": true,
+                        "type": "string",
+                        "example": "1234"
+                    },
+                    {
+                        "name": "category",
+                        "in": "body",
+                        "description": "The supplier's category",
+                        "required": true,
+                        "type": "string",
+                        "example":  "food"
+                    },
+                    {
+                        "name": "company",
+                        "in": "body",
+                        "description": "The company's name",
+                        "required": true,
+                        "type": "string",
+                        "example": "A Company"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation. Supplier registered and session is (possibly) stored"
+                    },
+                    "400": {
+                        "description": "Already exists. Supplier with the given email already exists in the database",
+                        "schema": {
+                            "$ref": "#/definitions/AlreadyExists"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error. Failed to register supplier.",
                         "schema": {
                             "$ref": "#/definitions/FailedOp"
                         }
@@ -228,6 +442,30 @@
                     "type": "integer",
                     "description": "HTTP 404 status code",
                     "example": 404
+                }
+            }
+        },
+        "AlreadyExists": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Value defined by enum. Current value: 1",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Fixed value. Current value: 'already_exists'",
+                    "example": "already_exists"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "[PROP] already exists"
+                },
+                "status": {
+                    "type": "integer",
+                    "description": "HTTP 400 status code",
+                    "example": 400
                 }
             }
         }
