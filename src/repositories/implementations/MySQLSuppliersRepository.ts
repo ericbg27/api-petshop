@@ -2,6 +2,7 @@ import { Supplier } from "../../entities/Supplier";
 import { FailedOp } from "../../errors/FailedOp";
 import { SuppliersDAO } from "../daos/SuppliersDAO";
 import { ISuppliersRepository } from "../ISuppliersRepository";
+import { SupplierModel } from "../models/SupplierModel";
 
 export class MySQLSuppliersRepository implements ISuppliersRepository {
     async create(supplier: Supplier): Promise<void> {
@@ -66,15 +67,37 @@ export class MySQLSuppliersRepository implements ISuppliersRepository {
         }
     }
 
-    async update(id: number, data: Supplier): Promise<void> {
+    async update(id: number, data: Supplier): Promise<Supplier> {
         try {
-            return await SuppliersDAO.update(
+             await SuppliersDAO.update(
                 data,
                 { id: id }
             );
         } catch(_) {
             throw new FailedOp('update', 'supplier');
         }
+
+        let updatedSupplier: SupplierModel | null;
+        try {
+            updatedSupplier = await SuppliersDAO.findOne({ 
+                where: { 
+                    id: id 
+                }
+            });
+        } catch(_) {
+            updatedSupplier = null;
+        }
+
+        if(!updatedSupplier) {
+            return new Supplier({
+                company: "",
+                category: "",
+                email: "",
+                password : ""
+            });
+        }
+
+        return new Supplier(updatedSupplier.get({ plain: true }));
     }
 
     async delete(id: number): Promise<void> {

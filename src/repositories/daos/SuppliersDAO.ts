@@ -28,6 +28,7 @@ export class SuppliersDAO {
             throw new Error('No rows affected by update statement');
         }
 
+        return;
     }
 
     static async delete(queryOptions: { [key: string]: any }): Promise<void> {

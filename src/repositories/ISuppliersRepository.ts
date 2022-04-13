@@ -5,6 +5,6 @@ export interface ISuppliersRepository {
     findAll(): Promise<Supplier[]>;
     findById(id: number): Promise<Supplier | undefined>;
     findByEmail(email: string): Promise<Supplier | undefined>;
-    update(id: number, data: Supplier): Promise<void>;
+    update(id: number, data: Supplier): Promise<Supplier>;
     delete(id: number): Promise<void>;
 }
