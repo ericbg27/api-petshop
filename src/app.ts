@@ -6,6 +6,10 @@ import { productRouter } from './routes/productRoutes';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import nodeConfig from "config";
+import * as fs from "fs";
+import * as swaggerUi from "swagger-ui-express";
+
+const basePath = "/api";
 
 const { createClient } = require('redis');
 
@@ -13,11 +17,18 @@ const app = express();
 
 app.use(express.json());
 
+const swaggerFile =  (process.cwd()+"/swagger/swagger.json");
+const swaggerData = fs.readFileSync(swaggerFile, 'utf8');
+const swaggerDocument = JSON.parse(swaggerData);
+
+app.use('/api/docs', swaggerUi.serve,
+            swaggerUi.setup(swaggerDocument, undefined, undefined, undefined));
+
 let RedisStore = connectRedis(session);
 let redisClient = createClient({
     legacyMode: true,
     host: nodeConfig.get<string>('redis.host'),
-    port: nodeConfig.get<number>('redis.port')   
+    port: nodeConfig.get<number>('redis.port')
 });
 redisClient.connect().catch(console.error);
 
@@ -33,8 +44,8 @@ app.use(session({
     }
 }));
 
-app.use('/suppliers', supplierRouter);
-app.use('/suppliers/:supplierId/products', productRouter);
+app.use(`${basePath}/suppliers`, supplierRouter);
+app.use(`${basePath}/suppliers/:supplierId/products`, productRouter);
 
 app.use(function(error: any, req: Request, res: Response, next: any) {
     let err = error;
