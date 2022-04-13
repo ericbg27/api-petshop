@@ -8,7 +8,7 @@ export class UpdateSupplierUseCase {
         private suppliersRepository: ISuppliersRepository
     ) {}
 
-    async exec(id: number, data: IUpdateSupplierDTO): Promise<void> {
+    async exec(id: number, data: IUpdateSupplierDTO): Promise<Supplier> {
         const savedUser = await this.suppliersRepository.findById(id);
         if(!savedUser) {
             throw new NotFound(`Supplier with ID ${id} was not found in database`);

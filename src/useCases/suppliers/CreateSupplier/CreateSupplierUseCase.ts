@@ -21,15 +21,16 @@ export class CreateSupplierUseCase {
 
         const supplier = new Supplier(requestData);
         
+        let supplierId: number = -1;
         try {
-            await this.suppliersRepository.create(supplier);
+            supplierId = await this.suppliersRepository.create(supplier);
         } catch(error) {
             throw error;
         }
 
         let newSupplier: Supplier | undefined;
         try {
-            newSupplier = await this.suppliersRepository.findByEmail(supplier.email);
+            newSupplier = await this.suppliersRepository.findById(supplierId);
 
             return newSupplier;
         } catch(_) {

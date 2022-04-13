@@ -42,25 +42,25 @@ export class Supplier {
             }
         } 
 
-        if(this.password.length === 0 && needsChecking.password) {
+        if(needsChecking.password && this.password.length === 0) {
             throw new InvalidInput("password");
         } else if(needsChecking.password) {
             this.password = this.password.trim();
         }
 
-        if(!Object.values(Category).includes(this.category as Category) && needsChecking.category) {
+        if(needsChecking.category && !Object.values(Category).includes(this.category as Category)) {
             throw new InvalidInput("category");
         } else if(needsChecking.category) {
             this.category = this.category.trim();
         }
         
-        if(this.company.length === 0 && needsChecking.company) {
+        if(needsChecking.company && this.company.length === 0) {
             throw new InvalidInput("company name");
         } else if(needsChecking.company) {
             this.company = this.company.trim();
         }
 
-        if(this.email.length === 0 && needsChecking.email) {
+        if(needsChecking.email && this.email.length === 0) {
             throw new InvalidInput("email");
         } else if(needsChecking.email) {
             this.email = this.email.trim();

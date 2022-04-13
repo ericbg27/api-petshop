@@ -14,8 +14,8 @@ describe("MySQL Suppliers Repository create tests", function () {
   const methodsToMock = ['create'];
 
   const mockSuppliersDAO = mockModule(SuppliersDAO, methodsToMock, {
-    create: async (supplier: Supplier): Promise<void> => {
-      return;
+    create: async (supplier: Supplier): Promise<number> => {
+      return 1;
     }
   });
 
@@ -52,7 +52,7 @@ describe("MySQL Suppliers Repository create tests", function () {
 
   it("Should throw a FailedOp error instance", async function () {
     mockSuppliersDAO(sandbox, {
-      create: async (supplier: Supplier): Promise<void> => {
+      create: async (supplier: Supplier): Promise<number> => {
         throw new Error();
       }
     });
@@ -287,11 +287,19 @@ describe("MySQL Suppliers Repository find tests", function () {
 });
 
 describe("MySQL Suppliers Repository update tests", function () {
-  const methodsToMock = ['update'];
+  const methodsToMock = ['update', 'findOne'];
 
   const mockSuppliersDAO = mockModule(SuppliersDAO, methodsToMock, {
     update: async (supplierData: Supplier, whereClause: { [key: string]: any }): Promise<void> => {
       return;
+    },
+    findOne: async(queryOptions: { [key: string]: any }): Promise<SupplierModel | null> => {
+      return new SupplierModel({
+        company: "Test",
+        category: "food",
+        password: "1234",
+        email: "test@email.com"
+      })
     }
   });
 
@@ -310,8 +318,9 @@ describe("MySQL Suppliers Repository update tests", function () {
     const mySQLSuppliersRepository = new MySQLSuppliersRepository();
 
     let error: null | FailedOp = null;
+    let updatedSupplier: Supplier | null = null;
     try {
-      await mySQLSuppliersRepository.update(1, 
+      updatedSupplier = await mySQLSuppliersRepository.update(1, 
         new Supplier({
           company: "",
           category: "",
@@ -324,6 +333,12 @@ describe("MySQL Suppliers Repository update tests", function () {
     }
 
     expect(error).to.be.null;
+
+    expect(updatedSupplier).not.to.be.null;
+    equal(updatedSupplier!.company, "Test");
+    equal(updatedSupplier!.category, "food");
+    equal(updatedSupplier!.password, "1234");
+    equal(updatedSupplier!.email, "test@email.com");
   });
 
   it("Should throw a FailedOp error instance when trying to update a supplier", async function () {
