@@ -1,0 +1,319 @@
+{
+    "/suppliers": {
+        "get": {
+            "summary": "Get all available suppliers",
+            "description:": "Get all available suppliers",
+            "produces": ["application/json"],
+            "parameters": [],
+            "responses": {
+                "200": {
+                    "description": "Successful operation",
+                    "schema": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "./definitions.json#Supplier"
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Server error",
+                    "schema": {
+                        "$ref": "./definitions.json#FailedOp"
+                    }
+                }
+            }
+        }
+    },
+    "/suppliers/:supplierId": {
+        "get": {
+            "summary": "Get supplier with respective ID",
+            "description:": "Get supplier with respective ID",
+            "produces": ["application/json"],
+            "parameters": [
+                {
+                    "name": "supplierId",
+                    "in": "path",
+                    "description": "ID of the supplier to be retrieved",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successful operation",
+                    "schema": {
+                        "$ref": "./definitions.json#Supplier"
+                    }
+                },
+                "500": {
+                    "description": "Server error",
+                    "schema": {
+                        "$ref": "./definitions.json#FailedOp"
+                    }
+                }
+            }
+        },
+        "put": {
+            "summary": "Update supplier",
+            "description:": "Update supplier. This route does not accept partial information",
+            "produces": ["application/json"],
+            "parameters": [
+                {
+                    "name": "supplierId",
+                    "in": "path",
+                    "description": "ID of the supplier to be updated",
+                    "required": true,
+                    "type": "integer"
+                },
+                {
+                    "name": "email",
+                    "in": "body",
+                    "description": "The supplier's email",
+                    "required": true,
+                    "type": "string",
+                    "example": "supplier@email.com"
+                },
+                {
+                    "name": "category",
+                    "in": "body",
+                    "description": "The supplier's category",
+                    "required": true,
+                    "type": "string",
+                    "example":  "food"
+                },
+                {
+                    "name": "company",
+                    "in": "body",
+                    "description": "The company's name",
+                    "required": true,
+                    "type": "string",
+                    "example": "A Company"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successful operation. Supplier is logged in and session is (possibly) stored"
+                },
+                "401": {
+                    "description": "Unauthorized. Supplier logged in is not the same as the one that is being updated",
+                    "schema": {
+                        "$ref": "./definitions.json#Unauthorized"
+                    }
+                },
+                "404": {
+                    "description": "Not Found. No supplier with the provided ID was found",
+                    "schema": {
+                        "$ref": "./definitions.json#NotFound"
+                    }
+                },
+                "500": {
+                    "description": "Server error. Failed to update supplier.",
+                    "schema": {
+                        "$ref": "./definitions.json#FailedOp"
+                    }
+                }
+            }
+        },
+        "patch": {
+            "summary": "Update supplier",
+            "description:": "Update supplier. This route does accepts partial information",
+            "produces": ["application/json"],
+            "parameters": [
+                {
+                    "name": "supplierId",
+                    "in": "path",
+                    "description": "ID of the supplier to be updated",
+                    "required": true,
+                    "type": "integer"
+                },
+                {
+                    "name": "email",
+                    "in": "body",
+                    "description": "The supplier's email",
+                    "type": "string",
+                    "example": "supplier@email.com"
+                },
+                {
+                    "name": "category",
+                    "in": "body",
+                    "description": "The supplier's category",
+                    "type": "string",
+                    "example":  "food"
+                },
+                {
+                    "name": "company",
+                    "in": "body",
+                    "description": "The company's name",
+                    "type": "string",
+                    "example": "A Company"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successful operation. Supplier is logged in and session is (possibly) stored"
+                },
+                "401": {
+                    "description": "Unauthorized. Supplier logged in is not the same as the one that is being updated",
+                    "schema": {
+                        "$ref": "./definitions.json#Unauthorized"
+                    }
+                },
+                "404": {
+                    "description": "Not Found. No supplier with the provided ID was found",
+                    "schema": {
+                        "$ref": "./definitions.json#NotFound"
+                    }
+                },
+                "500": {
+                    "description": "Server error. Failed to update supplier.",
+                    "schema": {
+                        "$ref": "./definitions.json#FailedOp"
+                    }
+                }
+            }
+        },
+        "delete": {
+            "summary": "Delete supplier",
+            "description:": "Delete supplier with the provided ID",
+            "produces": ["application/json"],
+            "parameters": [
+                {
+                    "name": "supplierId",
+                    "in": "path",
+                    "description": "ID of the supplier to be deleted",
+                    "required": true,
+                    "type": "integer"
+                }
+            ],
+            "responses": {
+                "204": {
+                    "description": "Successful operation. Supplier is deleted"
+                },
+                "401": {
+                    "description": "Unauthorized. Supplier logged in is not the same as the one that is being deleted",
+                    "schema": {
+                        "$ref": "./definitions.json#Unauthorized"
+                    }
+                },
+                "404": {
+                    "description": "Not Found. No supplier with the provided ID was found",
+                    "schema": {
+                        "$ref": "./definitions.json#NotFound"
+                    }
+                },
+                "500": {
+                    "description": "Server error. Failed to delete supplier.",
+                    "schema": {
+                        "$ref": "./definitions.json#FailedOp"
+                    }
+                }
+            }
+        }
+    },
+    "/suppliers/login": {
+        "post": {
+            "summary": "Login supplier",
+            "description:": "Login supplier given password and email",
+            "produces": ["application/json"],
+            "parameters": [
+                {
+                    "name": "email",
+                    "in": "body",
+                    "description": "The supplier's email",
+                    "required": true,
+                    "type": "string",
+                    "example": "supplier@email.com"
+                },
+                {
+                    "name": "password",
+                    "in": "body",
+                    "description": "The supplier's password",
+                    "required": true,
+                    "type": "string",
+                    "example": "1234"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successful operation. Supplier is logged in and session is (possibly) stored"
+                },
+                "401": {
+                    "description": "Unauthorized. Wrong password provided for given email",
+                    "schema": {
+                        "$ref": "./definitions.json#Unauthorized"
+                    }
+                },
+                "404": {
+                    "description": "Not Found. No supplier with the provided email was found",
+                    "schema": {
+                        "$ref": "./definitions.json#NotFound"
+                    }
+                },
+                "500": {
+                    "description": "Server error. Failed to login.",
+                    "schema": {
+                        "$ref": "./definitions.json#FailedOp"
+                    }
+                }
+            }
+        }
+    },
+    "/suppliers/register": {
+        "post": {
+            "summary": "Register supplier",
+            "description:": "Register a new supplier given necessary information",
+            "produces": ["application/json"],
+            "parameters": [
+                {
+                    "name": "email",
+                    "in": "body",
+                    "description": "The supplier's email",
+                    "required": true,
+                    "type": "string",
+                    "example": "supplier@email.com"
+                },
+                {
+                    "name": "password",
+                    "in": "body",
+                    "description": "The supplier's password",
+                    "required": true,
+                    "type": "string",
+                    "example": "1234"
+                },
+                {
+                    "name": "category",
+                    "in": "body",
+                    "description": "The supplier's category",
+                    "required": true,
+                    "type": "string",
+                    "example":  "food"
+                },
+                {
+                    "name": "company",
+                    "in": "body",
+                    "description": "The company's name",
+                    "required": true,
+                    "type": "string",
+                    "example": "A Company"
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Successful operation. Supplier registered and session is (possibly) stored"
+                },
+                "400": {
+                    "description": "Already exists. Supplier with the given email already exists in the database",
+                    "schema": {
+                        "$ref": "./definitions.json#AlreadyExists"
+                    }
+                },
+                "500": {
+                    "description": "Server error. Failed to register supplier.",
+                    "schema": {
+                        "$ref": "./definitions.json#FailedOp"
+                    }
+                }
+            }
+        }
+    }
+}

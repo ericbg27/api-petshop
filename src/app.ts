@@ -6,8 +6,8 @@ import { productRouter } from './routes/productRoutes';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import nodeConfig from "config";
-import * as fs from "fs";
 import * as swaggerUi from "swagger-ui-express";
+import { MultiFileSwaggerReader } from './helpers/MultiFileSwaggerReader';
 
 const basePath = "/api";
 
@@ -17,12 +17,10 @@ const app = express();
 
 app.use(express.json());
 
-const swaggerFile =  (process.cwd()+"/swagger/swagger.json");
-const swaggerData = fs.readFileSync(swaggerFile, 'utf8');
-const swaggerDocument = JSON.parse(swaggerData);
-
-app.use('/api/docs', swaggerUi.serve,
-            swaggerUi.setup(swaggerDocument, undefined, undefined, undefined));
+const swaggerReader = new MultiFileSwaggerReader(process.cwd()+"/swagger/swagger.json");
+swaggerReader.read().then((swaggerDocument) => {
+    app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, undefined, undefined, undefined));
+});
 
 let RedisStore = connectRedis(session);
 let redisClient = createClient({
