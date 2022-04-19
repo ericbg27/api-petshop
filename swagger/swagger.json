@@ -1,0 +1,24 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a simple example NodeJS API for a petshop site",
+        "version": "1.0.0",
+        "title": "API Petshop",
+        "contact": {
+            "email": "abc@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "schemes": ["http"],
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "paths" : {
+        "$ref": "./paths.json"
+    },
+    "definitions": {
+        "$ref": "./definitions.json"
+    }
+}

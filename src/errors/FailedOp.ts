@@ -9,7 +9,7 @@ export class FailedOp implements RequestError {
 
     constructor(op: string, entity: string) {
         this.id = ErrorID.InvalidInput;
-        this.name = "invalid_input";
+        this.name = "failed_op";
         this.message = `Failed to ${op} ${entity}`;
         this.status = 500;
     }
