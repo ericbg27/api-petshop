@@ -8,6 +8,7 @@ import connectRedis from 'connect-redis';
 import nodeConfig from "config";
 import * as swaggerUi from "swagger-ui-express";
 import { MultiFileSwaggerReader } from './helpers/MultiFileSwaggerReader';
+import * as fs from 'fs';
 
 const basePath = "/api";
 
@@ -17,9 +18,18 @@ const app = express();
 
 app.use(express.json());
 
-const swaggerReader = new MultiFileSwaggerReader(process.cwd()+"/swagger/swagger.json");
-swaggerReader.read().then((swaggerDocument) => {
-    app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, undefined, undefined, undefined));
+const swaggerDir = process.cwd() + "/swagger";
+const swaggerFile = swaggerDir + "/swagger.json";
+
+const swaggerReader = new MultiFileSwaggerReader();
+swaggerReader.readMultiple(swaggerDir, ["swagger.json"]).then((fileContents) => { 
+    swaggerReader.read(swaggerFile).then((swaggerDocument) => {
+        app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, undefined, undefined, undefined));
+        
+        for(const file in fileContents) {
+            fs.writeFileSync(file, fileContents[file]);
+        }
+    });
 });
 
 let RedisStore = connectRedis(session);

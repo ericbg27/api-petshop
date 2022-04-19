@@ -3,11 +3,27 @@ import * as fs from "fs";
 import {JsonObject } from "swagger-ui-express";
 
 class MultiFileSwaggerReader {
-    constructor(
-        private rootFile: string
-    ) {}
+    async readMultiple(rootDir: string, filesToAvoid: string[]): Promise<{ [key: string]: string } > {
+        let originalFileContents: { [key: string]: string } = {};
 
-    async read(): Promise<JsonObject | undefined> {
+        const rootDirFiles = fs.readdirSync(rootDir);
+
+        for(const file of rootDirFiles) {
+            if(!(filesToAvoid.includes(file))) {
+                const completeFileName = rootDir + "/" + file;
+        
+                const resolvedFile = await this.read(completeFileName);
+                if(resolvedFile) {
+                    originalFileContents[completeFileName] = fs.readFileSync(completeFileName).toString();
+                    fs.writeFileSync(completeFileName, JSON.stringify(resolvedFile, null, 2));
+                }
+            }
+        }
+
+        return originalFileContents;
+    }
+
+    async read(rootFile: string): Promise<JsonObject | undefined> {
         const options = {
             filter: ["relative", "remote"],
             loaderOptions: {
@@ -15,10 +31,10 @@ class MultiFileSwaggerReader {
                     callback(null, JSON.parse(res.text));
                 },
             },
-            location: this.rootFile
+            location: rootFile
         };
         
-        const rootFileContent = fs.readFileSync(this.rootFile, 'utf-8');
+        const rootFileContent = fs.readFileSync(rootFile, 'utf-8');
         if(!rootFileContent) {
             return undefined;
         }

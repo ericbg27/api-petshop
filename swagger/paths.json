@@ -1,0 +1,772 @@
+{
+  "/suppliers": {
+    "get": {
+      "summary": "Get all available suppliers",
+      "description:": "Get all available suppliers",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Successful operation",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions.json#/Supplier"
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    }
+  },
+  "/suppliers/{supplierId}": {
+    "get": {
+      "summary": "Get supplier with respective ID",
+      "description:": "Get supplier with respective ID",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "supplierId",
+          "in": "path",
+          "description": "ID of the supplier to be retrieved",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful operation",
+          "schema": {
+            "$ref": "./definitions.json#/Supplier"
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    },
+    "put": {
+      "summary": "Update supplier",
+      "description:": "Update supplier. This route does not accept partial information",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "supplierId",
+          "in": "path",
+          "description": "ID of the supplier to be updated",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "email",
+          "in": "body",
+          "description": "The supplier's email",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "supplier@email.com"
+          }
+        },
+        {
+          "name": "category",
+          "in": "body",
+          "description": "The supplier's category",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "food"
+          }
+        },
+        {
+          "name": "company",
+          "in": "body",
+          "description": "The company's name",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "A Company"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful operation. Supplier is logged in and session is (possibly) stored"
+        },
+        "401": {
+          "description": "Unauthorized. Supplier logged in is not the same as the one that is being updated",
+          "schema": {
+            "$ref": "./definitions.json#/Unauthorized"
+          }
+        },
+        "404": {
+          "description": "Not Found. No supplier with the provided ID was found",
+          "schema": {
+            "$ref": "./definitions.json#/NotFound"
+          }
+        },
+        "500": {
+          "description": "Server error. Failed to update supplier.",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    },
+    "patch": {
+      "summary": "Update supplier",
+      "description:": "Update supplier. This route does accepts partial information",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "supplierId",
+          "in": "path",
+          "description": "ID of the supplier to be updated",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "email",
+          "in": "body",
+          "description": "The supplier's email",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "example": "supplier@email.com"
+          }
+        },
+        {
+          "name": "category",
+          "in": "body",
+          "description": "The supplier's category",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "example": "food"
+          }
+        },
+        {
+          "name": "company",
+          "in": "body",
+          "description": "The company's name",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "example": "A Company"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful operation. Supplier is logged in and session is (possibly) stored"
+        },
+        "401": {
+          "description": "Unauthorized. Supplier logged in is not the same as the one that is being updated",
+          "schema": {
+            "$ref": "./definitions.json#/Unauthorized"
+          }
+        },
+        "404": {
+          "description": "Not Found. No supplier with the provided ID was found",
+          "schema": {
+            "$ref": "./definitions.json#/NotFound"
+          }
+        },
+        "500": {
+          "description": "Server error. Failed to update supplier.",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    },
+    "delete": {
+      "summary": "Delete supplier",
+      "description:": "Delete supplier with the provided ID",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "supplierId",
+          "in": "path",
+          "description": "ID of the supplier to be deleted",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "Successful operation. Supplier is deleted"
+        },
+        "401": {
+          "description": "Unauthorized. Supplier logged in is not the same as the one that is being deleted",
+          "schema": {
+            "$ref": "./definitions.json#/Unauthorized"
+          }
+        },
+        "404": {
+          "description": "Not Found. No supplier with the provided ID was found",
+          "schema": {
+            "$ref": "./definitions.json#/NotFound"
+          }
+        },
+        "500": {
+          "description": "Server error. Failed to delete supplier.",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    }
+  },
+  "/suppliers/login": {
+    "post": {
+      "summary": "Login supplier",
+      "description:": "Login supplier given password and email",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "email",
+          "in": "body",
+          "description": "The supplier's email",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "supplier@email.com"
+          }
+        },
+        {
+          "name": "password",
+          "in": "body",
+          "description": "The supplier's password",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "1234"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful operation. Supplier is logged in and session is (possibly) stored"
+        },
+        "401": {
+          "description": "Unauthorized. Wrong password provided for given email",
+          "schema": {
+            "$ref": "./definitions.json#/Unauthorized"
+          }
+        },
+        "404": {
+          "description": "Not Found. No supplier with the provided email was found",
+          "schema": {
+            "$ref": "./definitions.json#/NotFound"
+          }
+        },
+        "500": {
+          "description": "Server error. Failed to login.",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    }
+  },
+  "/suppliers/register": {
+    "post": {
+      "summary": "Register supplier",
+      "description:": "Register a new supplier given necessary information",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "email",
+          "in": "body",
+          "description": "The supplier's email",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "supplier@email.com"
+          }
+        },
+        {
+          "name": "password",
+          "in": "body",
+          "description": "The supplier's password",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "1234"
+          }
+        },
+        {
+          "name": "category",
+          "in": "body",
+          "description": "The supplier's category",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "food"
+          }
+        },
+        {
+          "name": "company",
+          "in": "body",
+          "description": "The company's name",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "A Company"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful operation. Supplier registered and session is (possibly) stored"
+        },
+        "400": {
+          "description": "Already exists. Supplier with the given email already exists in the database",
+          "schema": {
+            "$ref": "./definitions.json#/AlreadyExists"
+          }
+        },
+        "500": {
+          "description": "Server error. Failed to register supplier.",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    }
+  },
+  "/supplier/{supplierId}/products": {
+    "get": {
+      "summary": "Get all products for a supplier with a given ID",
+      "description:": "Get all products for a supplier with a given ID",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "supplierId",
+          "in": "path",
+          "description": "The supplier's ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful operation",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "./definitions.json#/Product"
+            }
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    }
+  },
+  "/supplier/{supplierId}/products/{productId}": {
+    "get": {
+      "summary": "Get a product with a given ID",
+      "description:": "Get a product with a given ID, which belongs to a supplier with another ID",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "supplierId",
+          "in": "path",
+          "description": "The supplier's ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "productId",
+          "in": "path",
+          "description": "The product's ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful operation",
+          "schema": {
+            "$ref": "./definitions.json#/Product"
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    },
+    "delete": {
+      "summary": "Delete product with a given ID",
+      "description:": "Delete a product with a given ID, which belongs to a supplier with another ID",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "supplierId",
+          "in": "path",
+          "description": "The supplier's ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "productId",
+          "in": "path",
+          "description": "The product's ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "Successful operation"
+        },
+        "401": {
+          "description": "Unauthorized. Supplier is either not logged in or is not the owner of the product",
+          "schema": {
+            "$ref": "./definitions.json#/Unauthorized"
+          }
+        },
+        "500": {
+          "description": "Server error",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    }
+  },
+  "/supplier/{supplierId}/products/create": {
+    "post": {
+      "summary": "Create product",
+      "description:": "Create product for a supplier with a given ID",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "in": "body",
+          "description": "The product's name",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "A Product"
+          }
+        },
+        {
+          "name": "price",
+          "in": "body",
+          "description": "The product's unit price",
+          "required": true,
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "quantity",
+          "in": "body",
+          "description": "The product's quantity",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "description",
+          "in": "body",
+          "description": "The product's description",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "This is the product's description"
+          }
+        },
+        {
+          "name": "supplierId",
+          "in": "path",
+          "description": "The supplier's ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful operation. Product is created in the database",
+          "schema": {
+            "$ref": "./definitions.json#/Product"
+          }
+        },
+        "400": {
+          "description": "Already exists. A product with the same name is already present for the given supplier",
+          "schema": {
+            "$ref": "./definitions.json#/AlreadyExists"
+          }
+        },
+        "401": {
+          "description": "Unauthorized. Supplier is not logged in",
+          "schema": {
+            "$ref": "./definitions.json#/Unauthorized"
+          }
+        },
+        "500": {
+          "description": "Server error. Failed to create product.",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    }
+  },
+  "/supplier/{supplierId}/products/{productId}/update": {
+    "put": {
+      "summary": "Update product",
+      "description:": "Update product with given ID for a supplier with a given ID. This route does not accept partial data.",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "in": "body",
+          "description": "The product's name",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "A Product"
+          }
+        },
+        {
+          "name": "price",
+          "in": "body",
+          "description": "The product's unit price",
+          "required": true,
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "quantity",
+          "in": "body",
+          "description": "The product's quantity",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "description",
+          "in": "body",
+          "description": "The product's description",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "This is the product's description"
+          }
+        },
+        {
+          "name": "supplierId",
+          "in": "path",
+          "description": "The supplier's ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "productId",
+          "in": "path",
+          "description": "The product's ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful operation. Product is created in the database",
+          "schema": {
+            "$ref": "./definitions.json#/Product"
+          }
+        },
+        "400": {
+          "description": "Bad Request. Request is malformed",
+          "schema": {
+            "$ref": "./definitions.json#/BadRequest"
+          }
+        },
+        "401": {
+          "description": "Unauthorized. Supplier is either not logged in or is not the owner of the product",
+          "schema": {
+            "$ref": "./definitions.json#/Unauthorized"
+          }
+        },
+        "404": {
+          "description": "Not Found. Product with the given ID does not exists in the database",
+          "schema": {
+            "$ref": "./definitions.json#/NotFound"
+          }
+        },
+        "500": {
+          "description": "Server error. Failed to update product.",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    },
+    "patch": {
+      "summary": "Update product",
+      "description:": "Update product with given ID for a supplier with a given ID. This route accepts partial data.",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "in": "body",
+          "description": "The product's name",
+          "schema": {
+            "type": "string",
+            "example": "A Product"
+          }
+        },
+        {
+          "name": "price",
+          "in": "body",
+          "description": "The product's unit price",
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "quantity",
+          "in": "body",
+          "description": "The product's quantity",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "description",
+          "in": "body",
+          "description": "The product's description",
+          "schema": {
+            "type": "string",
+            "example": "This is the product's description"
+          }
+        },
+        {
+          "name": "supplierId",
+          "in": "path",
+          "description": "The supplier's ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "productId",
+          "in": "path",
+          "description": "The product's ID",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successful operation. Product is created in the database",
+          "schema": {
+            "$ref": "./definitions.json#/Product"
+          }
+        },
+        "400": {
+          "description": "Bad Request. Request is malformed",
+          "schema": {
+            "$ref": "./definitions.json#/BadRequest"
+          }
+        },
+        "401": {
+          "description": "Unauthorized. Supplier is either not logged in or is not the owner of the product",
+          "schema": {
+            "$ref": "./definitions.json#/Unauthorized"
+          }
+        },
+        "404": {
+          "description": "Not Found. Product with the given ID does not exists in the database",
+          "schema": {
+            "$ref": "./definitions.json#/NotFound"
+          }
+        },
+        "500": {
+          "description": "Server error. Failed to update product.",
+          "schema": {
+            "$ref": "./definitions.json#/FailedOp"
+          }
+        }
+      }
+    }
+  }
+}

@@ -16,7 +16,7 @@
     "host": "localhost:3000",
     "basePath": "/api",
     "paths" : {
-        "$ref": "./suppliersRoutes.json"
+        "$ref": "./paths.json"
     },
     "definitions": {
         "$ref": "./definitions.json"
